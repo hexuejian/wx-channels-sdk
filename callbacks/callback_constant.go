@@ -84,3 +84,27 @@ const EventTypeChannelsEcWithdrawNotify EventType = "channels_ec_withdraw_notify
 
 // 提现二维码回调
 const EventTypeQrcodeStatus EventType = "qrcode_status"
+
+// 创建优惠券通知
+const EventTypeChannelsEcCouponCreate EventType = "channels_ec_coupon_create"
+
+// 优惠券删除通知
+const EventTypeChannelsEcCouponDelete EventType = "channels_ec_coupon_delete"
+
+// 优惠券过期通知
+const EventTypeChannelsEcCouponExpire EventType = "channels_ec_coupon_expire"
+
+// 更新优惠券信息通知
+const EventTypeChannelsEcCouponInfoChange EventType = "channels_ec_coupon_info_change"
+
+// 优惠券作废通知
+const EventTypeChannelsEcCouponInvalid EventType = "channels_ec_coupon_invalid"
+
+// 用户优惠券过期通知
+const EventTypeChannelsEcUserCouponExpire EventType = "channels_ec_user_coupon_expire"
+
+// 优惠券返还通知
+const EventTypeChannelsEcUserCouponUnuse EventType = "channels_ec_user_coupon_unuse"
+
+// 优惠券核销通知
+const EventTypeChannelsEcUserCouponUse EventType = "channels_ec_user_coupon_use"
