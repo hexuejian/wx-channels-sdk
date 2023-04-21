@@ -18,8 +18,10 @@ type callbackUrlVars struct {
 }
 
 type CallbackHandler struct {
-	token string // 回调 token
-	ep    *envelope.Processor
+	token               string // 回调 token
+	ep                  *envelope.Processor
+	callbackParseImpMap map[string]CallbackExtraInfoInterface
+	//rwLock              sync.RWMutex
 }
 
 func NewCallbackHandler(token string, encodingAESKey string) (*CallbackHandler, error) {
@@ -27,7 +29,10 @@ func NewCallbackHandler(token string, encodingAESKey string) (*CallbackHandler, 
 	if err != nil {
 		return nil, err
 	}
-	return &CallbackHandler{token: token, ep: ep}, nil
+
+	handler := &CallbackHandler{token: token, ep: ep, callbackParseImpMap: make(map[string]CallbackExtraInfoInterface)}
+	handler.RegisterCallBackImp()
+	return handler, nil
 }
 
 // 解析并获取回调数据
@@ -45,7 +50,7 @@ func (cb *CallbackHandler) GetCallbackMsg(r *http.Request) (CallbackMessage, err
 	}
 
 	// 解析json
-	message, err := CallbackMessage{}.ParseMessageFromJson(ev.Msg)
+	message, err := CallbackMessage{}.ParseMessageFromJson(ev.Msg, cb.callbackParseImpMap)
 	if err != nil {
 		return message, err
 	}
@@ -122,4 +127,26 @@ func (cb *CallbackHandler) parseUrlVars(urlVars url.Values) (callbackUrlVars, er
 		Nonce:     nonce,
 		EchoStr:   echoStr,
 	}, nil
+}
+
+// RegisterCallBackImp 注册回调函数实现
+func (cb *CallbackHandler) RegisterCallBackImp() {
+	item1 := ChannelsEcCouponInvalid{}
+	cb.callbackParseImpMap[item1.GetTypeKey()] = item1
+	item2 := ChannelsEcCouponDelete{}
+	cb.callbackParseImpMap[item2.GetTypeKey()] = item2
+	item3 := ChannelsEcUserCouponUse{}
+	cb.callbackParseImpMap[item3.GetTypeKey()] = item3
+	item4 := ChannelsEcCouponExpire{}
+	cb.callbackParseImpMap[item4.GetTypeKey()] = item4
+	item5 := ChannelsEcUserCouponUnuse{}
+	cb.callbackParseImpMap[item5.GetTypeKey()] = item5
+	item6 := ChannelsEcCouponReceive{}
+	cb.callbackParseImpMap[item6.GetTypeKey()] = item6
+	item7 := ChannelsEcCouponCreate{}
+	cb.callbackParseImpMap[item7.GetTypeKey()] = item7
+	item8 := ChannelsEcCouponInfoChange{}
+	cb.callbackParseImpMap[item8.GetTypeKey()] = item8
+	item9 := ChannelsEcUserCouponExpire{}
+	cb.callbackParseImpMap[item9.GetTypeKey()] = item9
 }

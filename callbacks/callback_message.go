@@ -28,7 +28,7 @@ type CallbackMessage struct {
 	OriginalMessage string `json:"OriginalMessage"`
 }
 
-func (m CallbackMessage) ParseMessageFromJson(body []byte) (CallbackMessage, error) {
+func (m CallbackMessage) ParseMessageFromJson(body []byte, callbackParseImpMap map[string]CallbackExtraInfoInterface) (CallbackMessage, error) {
 	err := json.Unmarshal(body, &m)
 	if err != nil {
 		return m, err
@@ -42,7 +42,8 @@ func (m CallbackMessage) ParseMessageFromJson(body []byte) (CallbackMessage, err
 
 	m.EventType = EventType(strings.Trim(string(m.EventType), " "))
 
-	extraParser, ok := callbackParseExtraInfoMap[m.GetTypeKey()]
+	//extraParser, ok := callbackParseExtraInfoMap[m.GetTypeKey()]
+	extraParser, ok := callbackParseImpMap[m.GetTypeKey()]
 	if ok {
 		m.Extras, err = extraParser.ParseFromJson(body)
 	} else {
