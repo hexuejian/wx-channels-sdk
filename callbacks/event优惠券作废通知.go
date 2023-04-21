@@ -17,8 +17,8 @@ type ChannelsEcCouponInvalid struct {
 	MsgType      string `json:"MsgType"`
 	ToUserName   string `json:"ToUserName"`
 	CouponInfo   struct {
-		CouponID    string `json:"coupon_id"`
-		InvalidTime string `json:"invalid_time"`
+		CouponID    int64 `json:"coupon_id"`
+		InvalidTime int64 `json:"invalid_time"`
 	} `json:"coupon_info"`
 }
 
@@ -44,11 +44,11 @@ func (ChannelsEcCouponInvalid) ParseFromJson(data []byte) (CallbackExtraInfoInte
 		MsgType:      gjson.GetBytes(data, "MsgType").String(),
 		ToUserName:   gjson.GetBytes(data, "ToUserName").String(),
 		CouponInfo: struct {
-			CouponID    string `json:"coupon_id"`
-			InvalidTime string `json:"invalid_time"`
+			CouponID    int64 `json:"coupon_id"`
+			InvalidTime int64 `json:"invalid_time"`
 		}{
-			CouponID:    gjson.GetBytes(data, "coupon_info.coupon_id").String(),
-			InvalidTime: gjson.GetBytes(data, "coupon_info.invalid_time").String(),
+			CouponID:    gjson.GetBytes(data, "coupon_info.coupon_id").Int(),
+			InvalidTime: gjson.GetBytes(data, "coupon_info.invalid_time").Int(),
 		},
 	}
 	return temp, nil
