@@ -36,7 +36,7 @@ func (m ChannelsEcUserCouponUse) GetTypeKey() string {
 	return m.GetMessageType() + ":" + m.GetEventType()
 }
 
-func (ChannelsEcUserCouponUse) ParseFromJson(data []byte) (CallBackExtraInfoInterface, error) {
+func (ChannelsEcUserCouponUse) ParseFromJson(data []byte) (CallbackExtraInfoInterface, error) {
 	var temp ChannelsEcUserCouponUse
 	err := json.Unmarshal(data, &temp)
 	return temp, err

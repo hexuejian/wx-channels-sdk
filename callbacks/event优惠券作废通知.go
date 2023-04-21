@@ -1,6 +1,6 @@
 package callbacks
 
-import "encoding/json"
+import "github.com/tidwall/gjson"
 
 // 优惠券作废通知
 // 文档: https://developers.weixin.qq.com/doc/channels/API/coupon/ec_callback/channels_ec_coupon_invalid.html
@@ -11,7 +11,7 @@ func init() {
 }
 
 type ChannelsEcCouponInvalid struct {
-	CreateTime   int    `json:"CreateTime"`
+	CreateTime   int64  `json:"CreateTime"`
 	Event        string `json:"Event"`
 	FromUserName string `json:"FromUserName"`
 	MsgType      string `json:"MsgType"`
@@ -34,8 +34,22 @@ func (m ChannelsEcCouponInvalid) GetTypeKey() string {
 	return m.GetMessageType() + ":" + m.GetEventType()
 }
 
-func (ChannelsEcCouponInvalid) ParseFromJson(data []byte) (CallBackExtraInfoInterface, error) {
-	var temp ChannelsEcCouponInvalid
-	err := json.Unmarshal(data, &temp)
-	return temp, err
+func (ChannelsEcCouponInvalid) ParseFromJson(data []byte) (CallbackExtraInfoInterface, error) {
+	//var temp ChannelsEcCouponInvalid
+	//err := json.Unmarshal(data, &temp)
+	var temp = ChannelsEcCouponInvalid{
+		CreateTime:   gjson.GetBytes(data, "CreateTime").Int(),
+		Event:        gjson.GetBytes(data, "Event").String(),
+		FromUserName: gjson.GetBytes(data, "FromUserName").String(),
+		MsgType:      gjson.GetBytes(data, "MsgType").String(),
+		ToUserName:   gjson.GetBytes(data, "ToUserName").String(),
+		CouponInfo: struct {
+			CouponID    string `json:"coupon_id"`
+			InvalidTime string `json:"invalid_time"`
+		}{
+			CouponID:    gjson.GetBytes(data, "coupon_info.coupon_id").String(),
+			InvalidTime: gjson.GetBytes(data, "coupon_info.invalid_time").String(),
+		},
+	}
+	return temp, nil
 }
