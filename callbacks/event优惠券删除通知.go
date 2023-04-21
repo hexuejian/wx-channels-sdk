@@ -17,8 +17,8 @@ type ChannelsEcCouponDelete struct {
 	MsgType      string `json:"MsgType"`
 	ToUserName   string `json:"ToUserName"`
 	CouponInfo   struct {
-		CouponID   string `json:"coupon_id"`
-		DeleteTime string `json:"delete_time"`
+		CouponID   int64 `json:"coupon_id"`
+		DeleteTime int64 `json:"delete_time"`
 	} `json:"coupon_info"`
 }
 

@@ -17,8 +17,8 @@ type ChannelsEcCouponInfoChange struct {
 	MsgType      string `json:"MsgType"`
 	ToUserName   string `json:"ToUserName"`
 	CouponInfo   struct {
-		ChangeTime string `json:"change_time"`
-		CouponID   string `json:"coupon_id"`
+		ChangeTime int64 `json:"change_time"`
+		CouponID   int64 `json:"coupon_id"`
 	} `json:"coupon_info"`
 }
 

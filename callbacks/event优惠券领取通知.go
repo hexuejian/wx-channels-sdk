@@ -17,9 +17,9 @@ type ChannelsEcCouponReceive struct {
 	MsgType      string `json:"MsgType"`
 	ToUserName   string `json:"ToUserName"`
 	ReceiveInfo  struct {
-		CouponID     string `json:"coupon_id"`
-		ReceiveTime  string `json:"receive_time"`
-		UserCouponID string `json:"user_coupon_id"`
+		CouponID     int64 `json:"coupon_id"`
+		ReceiveTime  int64 `json:"receive_time"`
+		UserCouponID int64 `json:"user_coupon_id"`
 	} `json:"receive_info"`
 }
 
@@ -43,13 +43,13 @@ func (ChannelsEcCouponReceive) ParseFromJson(data []byte) (CallbackExtraInfoInte
 		MsgType:      gjson.GetBytes(data, "MsgType").String(),
 		ToUserName:   gjson.GetBytes(data, "ToUserName").String(),
 		ReceiveInfo: struct {
-			CouponID     string `json:"coupon_id"`
-			ReceiveTime  string `json:"receive_time"`
-			UserCouponID string `json:"user_coupon_id"`
+			CouponID     int64 `json:"coupon_id"`
+			ReceiveTime  int64 `json:"receive_time"`
+			UserCouponID int64 `json:"user_coupon_id"`
 		}{
-			CouponID:     gjson.GetBytes(data, "receive_info.coupon_id").String(),
-			ReceiveTime:  gjson.GetBytes(data, "receive_info.receive_time").String(),
-			UserCouponID: gjson.GetBytes(data, "receive_info.user_coupon_id").String(),
+			CouponID:     gjson.GetBytes(data, "receive_info.coupon_id").Int(),
+			ReceiveTime:  gjson.GetBytes(data, "receive_info.receive_time").Int(),
+			UserCouponID: gjson.GetBytes(data, "receive_info.user_coupon_id").Int(),
 		},
 	}
 	return temp, nil

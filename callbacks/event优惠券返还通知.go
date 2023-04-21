@@ -17,10 +17,10 @@ type ChannelsEcUserCouponUnuse struct {
 	MsgType      string `json:"MsgType"`
 	ToUserName   string `json:"ToUserName"`
 	UseInfo      struct {
-		CouponID     string `json:"coupon_id"`
+		CouponID     int64  `json:"coupon_id"`
 		OrderID      string `json:"order_id"`
-		UnuseTime    string `json:"unuse_time"`
-		UserCouponID string `json:"user_coupon_id"`
+		UnuseTime    int64  `json:"unuse_time"`
+		UserCouponID int64  `json:"user_coupon_id"`
 	} `json:"use_info"`
 }
 
