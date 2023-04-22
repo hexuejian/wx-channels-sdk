@@ -51,7 +51,7 @@ type RespCouponGet struct {
 			} `json:"discount_info"`
 			ExtInfo struct {
 				InvalidTime   int    `json:"invalid_time"`
-				JumpProductId int    `json:"jump_product_id"`
+				JumpProductId string `json:"jump_product_id"`
 				Notes         string `json:"notes"`
 				ValidTime     int    `json:"valid_time"`
 			}
