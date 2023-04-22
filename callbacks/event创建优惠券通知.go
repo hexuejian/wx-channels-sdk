@@ -1,6 +1,8 @@
 package callbacks
 
-import "encoding/json"
+import (
+	"github.com/tidwall/gjson"
+)
 
 // 创建优惠券通知
 // 文档: https://developers.weixin.qq.com/doc/channels/API/coupon/ec_callback/channels_ec_coupon_create.html
@@ -11,14 +13,14 @@ func init() {
 }
 
 type ChannelsEcCouponCreate struct {
-	CreateTime   int    `json:"CreateTime"`
+	CreateTime   int64  `json:"CreateTime"`
 	Event        string `json:"Event"`
 	FromUserName string `json:"FromUserName"`
 	MsgType      string `json:"MsgType"`
 	ToUserName   string `json:"ToUserName"`
 	CouponInfo   struct {
-		CouponID   int64 `json:"coupon_id"`
-		CreateTime int64 `json:"create_time"`
+		CouponID   string `json:"coupon_id"`
+		CreateTime int64  `json:"create_time"`
 	} `json:"coupon_info"`
 }
 
@@ -35,7 +37,19 @@ func (m ChannelsEcCouponCreate) GetTypeKey() string {
 }
 
 func (ChannelsEcCouponCreate) ParseFromJson(data []byte) (CallbackExtraInfoInterface, error) {
-	var temp ChannelsEcCouponCreate
-	err := json.Unmarshal(data, &temp)
-	return temp, err
+	var temp = ChannelsEcCouponCreate{
+		CreateTime:   gjson.GetBytes(data, "CreateTime").Int(),
+		Event:        gjson.GetBytes(data, "Event").String(),
+		FromUserName: gjson.GetBytes(data, "FromUserName").String(),
+		MsgType:      gjson.GetBytes(data, "MsgType").String(),
+		ToUserName:   gjson.GetBytes(data, "ToUserName").String(),
+		CouponInfo: struct {
+			CouponID   string `json:"coupon_id"`
+			CreateTime int64  `json:"create_time"`
+		}{
+			CouponID:   gjson.GetBytes(data, "coupon_info.coupon_id").String(),
+			CreateTime: gjson.GetBytes(data, "coupon_info.create_time").Int(),
+		},
+	}
+	return temp, nil
 }

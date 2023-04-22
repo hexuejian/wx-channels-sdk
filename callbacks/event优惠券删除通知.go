@@ -1,6 +1,8 @@
 package callbacks
 
-import "encoding/json"
+import (
+	"github.com/tidwall/gjson"
+)
 
 // 优惠券删除通知
 // 文档: https://developers.weixin.qq.com/doc/channels/API/coupon/ec_callback/channels_ec_coupon_delete.html
@@ -11,14 +13,14 @@ func init() {
 }
 
 type ChannelsEcCouponDelete struct {
-	CreateTime   int    `json:"CreateTime"`
+	CreateTime   int64  `json:"CreateTime"`
 	Event        string `json:"Event"`
 	FromUserName string `json:"FromUserName"`
 	MsgType      string `json:"MsgType"`
 	ToUserName   string `json:"ToUserName"`
 	CouponInfo   struct {
-		CouponID   int64 `json:"coupon_id"`
-		DeleteTime int64 `json:"delete_time"`
+		CouponID   string `json:"coupon_id"`
+		DeleteTime int64  `json:"delete_time"`
 	} `json:"coupon_info"`
 }
 
@@ -35,7 +37,19 @@ func (m ChannelsEcCouponDelete) GetTypeKey() string {
 }
 
 func (ChannelsEcCouponDelete) ParseFromJson(data []byte) (CallbackExtraInfoInterface, error) {
-	var temp ChannelsEcCouponDelete
-	err := json.Unmarshal(data, &temp)
-	return temp, err
+	var temp = ChannelsEcCouponDelete{
+		CreateTime:   gjson.GetBytes(data, "CreateTime").Int(),
+		Event:        gjson.GetBytes(data, "Event").String(),
+		FromUserName: gjson.GetBytes(data, "FromUserName").String(),
+		MsgType:      gjson.GetBytes(data, "MsgType").String(),
+		ToUserName:   gjson.GetBytes(data, "ToUserName").String(),
+		CouponInfo: struct {
+			CouponID   string `json:"coupon_id"`
+			DeleteTime int64  `json:"delete_time"`
+		}{
+			CouponID:   gjson.GetBytes(data, "coupon_info.coupon_id").String(),
+			DeleteTime: gjson.GetBytes(data, "coupon_info.delete_time").Int(),
+		},
+	}
+	return temp, nil
 }
