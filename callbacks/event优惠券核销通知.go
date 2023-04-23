@@ -54,7 +54,7 @@ func (ChannelsEcUserCouponUse) ParseFromJson(data []byte) (CallbackExtraInfoInte
 			CouponID:     gjson.GetBytes(data, "use_info.coupon_id").String(),
 			OrderID:      gjson.GetBytes(data, "use_info.order_id").String(),
 			UserCouponID: gjson.GetBytes(data, "use_info.user_coupon_id").String(),
-			UseTime:      gjson.GetBytes(data, "use_info.user_coupon_id").Int(),
+			UseTime:      gjson.GetBytes(data, "use_info.use_time").Int(),
 		},
 	}
 	return temp, nil
