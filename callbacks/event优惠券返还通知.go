@@ -23,7 +23,7 @@ type ChannelsEcUserCouponUnuse struct {
 		OrderID      string `json:"order_id"`
 		UnuseTime    int64  `json:"unuse_time"`
 		UserCouponID string `json:"user_coupon_id"`
-	} `json:"use_info"`
+	} `json:"unuse_info"`
 }
 
 func (ChannelsEcUserCouponUnuse) GetMessageType() string {
@@ -51,10 +51,10 @@ func (ChannelsEcUserCouponUnuse) ParseFromJson(data []byte) (CallbackExtraInfoIn
 			UnuseTime    int64  `json:"unuse_time"`
 			UserCouponID string `json:"user_coupon_id"`
 		}{
-			CouponID:     gjson.GetBytes(data, "use_info.coupon_id").String(),
-			OrderID:      gjson.GetBytes(data, "use_info.order_id").String(),
-			UserCouponID: gjson.GetBytes(data, "use_info.user_coupon_id").String(),
-			UnuseTime:    gjson.GetBytes(data, "use_info.unuse_time").Int(),
+			CouponID:     gjson.GetBytes(data, "unuse_info.coupon_id").String(),
+			OrderID:      gjson.GetBytes(data, "unuse_info.order_id").String(),
+			UserCouponID: gjson.GetBytes(data, "unuse_info.user_coupon_id").String(),
+			UnuseTime:    gjson.GetBytes(data, "unuse_info.unuse_time").Int(),
 		},
 	}
 	return temp, nil
